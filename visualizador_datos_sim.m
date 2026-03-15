@@ -1,5 +1,6 @@
 numRobots = size(out.BicyclePose, 2) / 3;
 thetaIdx = 3;
+map = binaryOccupancyMap(simpleMap)
 
 % Translation
 xyz = out.BicyclePose;
