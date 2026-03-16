@@ -38,6 +38,5 @@ for k = 1:size(xyz, 1)
     quat = eul2quat(thetaEuler(k, :), 'xyz');
     plotTransforms(xyz(k,:), quat, 'MeshFilePath', 'groundvehicle.stl');
     
-    pause(0.0001)
     hold off;
 end
