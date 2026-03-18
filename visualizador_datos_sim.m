@@ -1,25 +1,29 @@
-% 1. Extraer los arreglos numéricos de los objetos timeseries
+% 1. Extraer los arreglos numéricos y el vector de tiempo
+time_data = out.BicyclePose.x.Time(:); % Se extrae el tiempo para calcular el Ts
 x_data = out.BicyclePose.x.Data(:);
 y_data = out.BicyclePose.y.Data(:);
 theta_data = out.BicyclePose.theta.Data(:);
 
-% 2. Reconstruir la matriz original [X, Y, Theta]
-poseMatrix = [x_data, y_data, theta_data];
+% Calcular matemáticamente el salto de índices equivalente a 1 segundo
+Ts = mean(diff(time_data)); 
+paso_1_seg = round(1 / Ts); 
 
-numRobots = size(poseMatrix, 2) / 3;
+% 2. Reconstruir la matriz original [X, Y, Theta]
+robotPose  = [x_data, y_data, theta_data];
 thetaIdx = 3;
 map = binaryOccupancyMap(simpleMap);
 
 % Translation
-xyz = poseMatrix;
-xyz(:, thetaIdx) = 0; 
+xyz = robotPose;
+xyz(:, thetaIdx) = 0;
 
 % Rotation in XYZ euler angles
-theta = poseMatrix(:, thetaIdx);
-thetaEuler = zeros(size(poseMatrix, 1), 3 * size(theta, 2));
+theta = robotPose(:,thetaIdx);
+thetaEuler = zeros(size(robotPose, 1), 3 * size(theta, 2));
 thetaEuler(:, end) = theta;
 
-for k = 1:size(xyz, 1)
+% Bucle for modificado iterando con el paso de 1 segundo
+for k = 1:paso_1_seg:size(xyz, 1)
     show(map)
     hold on;
     
@@ -32,12 +36,13 @@ for k = 1:size(xyz, 1)
     text(goalLoc(1), goalLoc(2), 2, 'Goal');
     
     % Plot Robot's XY locations
-    plot(poseMatrix(:, 1), poseMatrix(:, 2), '-b')
+    plot(robotPose(:, 1), robotPose(:, 2), '-b')
     
     % Plot Robot's pose as it traverses the path
     quat = eul2quat(thetaEuler(k, :), 'xyz');
-    plotTransforms(xyz(k,:), quat, 'MeshFilePath', 'groundvehicle.stl');
+    plotTransforms(xyz(k,:), quat, 'MeshFilePath',...
+        'groundvehicle.stl');
     
-    pause(0.001)
+    pause(0.01)
     hold off;
 end
