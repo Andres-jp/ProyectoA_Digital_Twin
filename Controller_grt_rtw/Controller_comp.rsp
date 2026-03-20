@@ -1,0 +1,6 @@
+-IC:/Users/Andres/MATLAB/Projects/Proyecto_Digital_Twin
+-IC:/Users/Andres/MATLAB/Projects/Proyecto_Digital_Twin/Controller_grt_rtw
+-I"C:/Program Files/MATLAB/R2024b/extern/include"
+-I"C:/Program Files/MATLAB/R2024b/simulink/include"
+-I"C:/Program Files/MATLAB/R2024b/rtw/c/src"
+-I"C:/Program Files/MATLAB/R2024b/rtw/c/src/ext_mode/common"
